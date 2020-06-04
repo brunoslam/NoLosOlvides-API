@@ -33,7 +33,7 @@ namespace NoLosOlvidesApi
                 options.AddPolicy(name: MyAllowSpecificOrigins,
                                   builder =>
                                   {
-                                      builder.WithOrigins("*", "*localhost*");
+                                      builder.WithOrigins("*");
                                   });
             });
             services.AddControllers();
