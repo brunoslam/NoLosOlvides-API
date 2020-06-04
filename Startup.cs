@@ -23,10 +23,19 @@ namespace NoLosOlvidesApi
         }
 
         public IConfiguration Configuration { get; }
+        readonly string MyAllowSpecificOrigins = "_myAllowSpecificOrigins";
 
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            services.AddCors(options =>
+            {
+                options.AddPolicy(name: MyAllowSpecificOrigins,
+                                  builder =>
+                                  {
+                                      builder.WithOrigins("*", "*localhost*");
+                                  });
+            });
             services.AddControllers();
 
             services.AddDbContext<NoLosOlvidesApiContext>(options =>
@@ -44,6 +53,8 @@ namespace NoLosOlvidesApi
             app.UseHttpsRedirection();
 
             app.UseRouting();
+
+            app.UseCors(MyAllowSpecificOrigins);
 
             app.UseAuthorization();
 
