@@ -41,9 +41,18 @@ namespace NoLosOlvidesApi
                                   });
             });
             services.AddControllers();
+            if (IsDebug)
+            {
+                services.AddDbContext<NoLosOlvidesApiContext>(options =>
+                options.UseSqlServer(Configuration.GetConnectionString("NoLosOlvidesApiContext")));
+            }
+            else
+            {
+                services.AddDbContext<NoLosOlvidesApiContext>(options =>
+                    options.UseSqlServer(Configuration.GetConnectionString("NoLosOlvidesApiContextProd")));
+            }
 
-            services.AddDbContext<NoLosOlvidesApiContext>(options =>
-                    options.UseSqlServer(Configuration.GetConnectionString("NoLosOlvidesApiContext")));
+
             //services.AddDbContext<NoLosOlvidesApiContext>(options =>
             //        options.UseSqlServer(ConfigurationManager.ConnectionStrings));
         }
@@ -68,6 +77,18 @@ namespace NoLosOlvidesApi
             {
                 endpoints.MapControllers();
             });
+        }
+
+        public static bool IsDebug
+        {
+            get
+            {
+                bool isDebug = false;
+#if DEBUG
+                isDebug = true;
+#endif
+                return isDebug;
+            }
         }
     }
 }
