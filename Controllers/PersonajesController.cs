@@ -12,48 +12,48 @@ namespace NoLosOlvidesApi.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class CategoriasController : ControllerBase
+    public class PersonajesController : ControllerBase
     {
         private readonly NoLosOlvidesApiContext _context;
 
-        public CategoriasController(NoLosOlvidesApiContext context)
+        public PersonajesController(NoLosOlvidesApiContext context)
         {
             _context = context;
         }
 
-        // GET: api/Categorias
+        // GET: api/Personajes
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<Categoria>>> GetCategoria()
+        public async Task<ActionResult<IEnumerable<Personaje>>> GetPersonaje()
         {
-            return await _context.Categoria.ToListAsync();
+            return await _context.Personaje.ToListAsync();
         }
 
-        // GET: api/Categorias/5
+        // GET: api/Personajes/5
         [HttpGet("{id}")]
-        public async Task<ActionResult<Categoria>> GetCategoria(int id)
+        public async Task<ActionResult<Personaje>> GetPersonaje(int id)
         {
-            var categoria = await _context.Categoria.FindAsync(id);
+            var personaje = await _context.Personaje.FindAsync(id);
 
-            if (categoria == null)
+            if (personaje == null)
             {
                 return NotFound();
             }
 
-            return categoria;
+            return personaje;
         }
 
-        // PUT: api/Categorias/5
+        // PUT: api/Personajes/5
         // To protect from overposting attacks, enable the specific properties you want to bind to, for
         // more details, see https://go.microsoft.com/fwlink/?linkid=2123754.
         [HttpPut("{id}")]
-        public async Task<IActionResult> PutCategoria(int id, Categoria categoria)
+        public async Task<IActionResult> PutPersonaje(int id, Personaje personaje)
         {
-            if (id != categoria.IdCategoria)
+            if (id != personaje.IdPersonaje)
             {
                 return BadRequest();
             }
 
-            _context.Entry(categoria).State = EntityState.Modified;
+            _context.Entry(personaje).State = EntityState.Modified;
 
             try
             {
@@ -61,7 +61,7 @@ namespace NoLosOlvidesApi.Controllers
             }
             catch (DbUpdateConcurrencyException)
             {
-                if (!CategoriaExists(id))
+                if (!PersonajeExists(id))
                 {
                     return NotFound();
                 }
@@ -74,37 +74,37 @@ namespace NoLosOlvidesApi.Controllers
             return NoContent();
         }
 
-        // POST: api/Categorias
+        // POST: api/Personajes
         // To protect from overposting attacks, enable the specific properties you want to bind to, for
         // more details, see https://go.microsoft.com/fwlink/?linkid=2123754.
         [HttpPost]
-        public async Task<ActionResult<Categoria>> PostCategoria(Categoria categoria)
+        public async Task<ActionResult<Personaje>> PostPersonaje(Personaje personaje)
         {
-            _context.Categoria.Add(categoria);
+            _context.Personaje.Add(personaje);
             await _context.SaveChangesAsync();
 
-            return CreatedAtAction("GetCategoria", new { id = categoria.IdCategoria }, categoria);
+            return CreatedAtAction("GetPersonaje", new { id = personaje.IdPersonaje }, personaje);
         }
 
-        // DELETE: api/Categorias/5
+        // DELETE: api/Personajes/5
         [HttpDelete("{id}")]
-        public async Task<ActionResult<Categoria>> DeleteCategoria(int id)
+        public async Task<ActionResult<Personaje>> DeletePersonaje(int id)
         {
-            var categoria = await _context.Categoria.FindAsync(id);
-            if (categoria == null)
+            var personaje = await _context.Personaje.FindAsync(id);
+            if (personaje == null)
             {
                 return NotFound();
             }
 
-            _context.Categoria.Remove(categoria);
+            _context.Personaje.Remove(personaje);
             await _context.SaveChangesAsync();
 
-            return categoria;
+            return personaje;
         }
 
-        private bool CategoriaExists(int id)
+        private bool PersonajeExists(int id)
         {
-            return _context.Categoria.Any(e => e.IdCategoria == id);
+            return _context.Personaje.Any(e => e.IdPersonaje == id);
         }
     }
 }

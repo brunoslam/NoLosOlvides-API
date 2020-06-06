@@ -17,5 +17,9 @@ namespace NoLosOlvidesApi.Data
         public DbSet<NoLosOlvidesApi.Model.Categoria> Categoria { get; set; }
 
         public DbSet<NoLosOlvidesApi.Model.Cargo> Cargo { get; set; }
+
+        public DbSet<NoLosOlvidesApi.Model.Staff> Staff { get; set; }
+
+        public DbSet<NoLosOlvidesApi.Model.Personaje> Personaje { get; set; }
     }
 }

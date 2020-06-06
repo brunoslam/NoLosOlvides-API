@@ -33,13 +33,19 @@ namespace NoLosOlvidesApi
                 options.AddPolicy(name: MyAllowSpecificOrigins,
                                   builder =>
                                   {
-                                      builder.WithOrigins("*");
+                                      //builder.WithOrigins("*");
+                                      //    <add name="Access-Control-Allow-Headers" value="Origin, X-Requested-With, Content-Type, Accept" />
+                                      builder.AllowAnyOrigin();
+                                      builder.AllowAnyHeader();
+
                                   });
             });
             services.AddControllers();
 
             services.AddDbContext<NoLosOlvidesApiContext>(options =>
                     options.UseSqlServer(Configuration.GetConnectionString("NoLosOlvidesApiContext")));
+            //services.AddDbContext<NoLosOlvidesApiContext>(options =>
+            //        options.UseSqlServer(ConfigurationManager.ConnectionStrings));
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

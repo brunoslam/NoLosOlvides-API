@@ -48,7 +48,7 @@ namespace NoLosOlvidesApi.Controllers
         [HttpPut("{id}")]
         public async Task<IActionResult> PutCargo(int id, Cargo cargo)
         {
-            if (id != cargo.ID)
+            if (id != cargo.IdCargo)
             {
                 return BadRequest();
             }
@@ -83,7 +83,7 @@ namespace NoLosOlvidesApi.Controllers
             _context.Cargo.Add(cargo);
             await _context.SaveChangesAsync();
 
-            return CreatedAtAction("GetCargo", new { id = cargo.ID }, cargo);
+            return CreatedAtAction("GetCargo", new { id = cargo.IdCargo }, cargo);
         }
 
         // DELETE: api/Cargos/5
@@ -104,7 +104,7 @@ namespace NoLosOlvidesApi.Controllers
 
         private bool CargoExists(int id)
         {
-            return _context.Cargo.Any(e => e.ID == id);
+            return _context.Cargo.Any(e => e.IdCargo == id);
         }
     }
 }
