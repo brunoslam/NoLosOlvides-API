@@ -32,7 +32,12 @@ namespace NoLosOlvidesApi.Controllers
         [HttpGet("{id}")]
         public async Task<ActionResult<Personaje>> GetPersonaje(int id)
         {
-            var personaje = await _context.Personaje.FindAsync(id);
+            //var personaje = _context.Personaje.Where(p => p.IdPersonaje == id).Include(p => p.IdCargo.se).FirstOrDefault();
+            //var personaje = await _context.Personaje.FindAsync(id);
+            var personaje = _context.Personaje.Where(p => p.IdPersonaje == id).FirstOrDefault();
+            var CargoController = new CargosController(_context);
+            var asd = _context.Cargo.Find(personaje.IdCargo);
+            personaje.Cargo = asd;
 
             if (personaje == null)
             {
