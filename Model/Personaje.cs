@@ -20,5 +20,6 @@ namespace NoLosOlvidesApi.Model
         public string Rut { get; set; }
         public string Nacionalidad { get; set; }
         public string ImagenUrl { get; set; }
+        public int IdEstadoAprobacion { get; set; }
     }
 }

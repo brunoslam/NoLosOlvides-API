@@ -1,20 +1,27 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Cryptography;
+using System.Text;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Newtonsoft.Json.Linq;
 using NoLosOlvidesApi.Data;
 using NoLosOlvidesApi.Model;
+using System.Text.Encodings;
 
 namespace NoLosOlvidesApi.Controllers
 {
+    //[Authorize]
     [Route("api/[controller]")]
     [ApiController]
     public class StaffController : ControllerBase
     {
         private readonly NoLosOlvidesApiContext _context;
+        private static readonly Encoding Encoding1252 = Encoding.GetEncoding(1252);
 
         public StaffController(NoLosOlvidesApiContext context)
         {
@@ -77,7 +84,7 @@ namespace NoLosOlvidesApi.Controllers
         // POST: api/Staff
         // To protect from overposting attacks, enable the specific properties you want to bind to, for
         // more details, see https://go.microsoft.com/fwlink/?linkid=2123754.
-       [HttpPost]
+        [HttpPost]
         public async Task<ActionResult<Staff>> PostStaff(Staff staff)
         {
             _context.Staff.Add(staff);
@@ -107,27 +114,43 @@ namespace NoLosOlvidesApi.Controllers
             return _context.Staff.Any(e => e.IdStaff == id);
         }
 
-
-        // POST: api/Staff
-        // To protect from overposting attacks, enable the specific properties you want to bind to, for
-        // more details, see https://go.microsoft.com/fwlink/?linkid=2123754.
-        //[HttpPost("{Username}")]
-        [HttpPost]
-        //public async Task<ActionResult<Staff>> StaffLogin([FromBody] Staff staffFB)
-        public async Task<ActionResult<Staff>> StaffLogin(string Username)
+        //https://jasonwatmore.com/post/2019/10/14/aspnet-core-3-simple-api-for-authentication-registration-and-user-management
+        [AllowAnonymous]
+        [HttpPost("authenticate")]
+        public async Task<ActionResult<Staff>> StaffLogin([FromBody]Login login)
         {
-            //Staff staff = _context.Staff.Where(s => s.Username == username && s.Password == password).First();
-            Staff staff = _context.Staff.Where(s => s.Username == Username).First();
-            //Staff staff = _context.Staff.Where(s => s.Username == staffFB.Username ).First();
-            //_context.Staff.Add(staff);
-            //await _context.SaveChangesAsync();
-            if (staff == null)
+            try
             {
-                return NotFound();
-            }
+                byte[] hash = SHA1HashValue(login.Password);
+                Staff staff = _context.Staff.Where(s => s.Username == login.Username && s.Password == hash).FirstOrDefault();
 
-            //return CreatedAtAction("GetStaff", new { id = staff.Id }, staff);
-            return staff;
+                if (staff == null)
+                {
+                    //return NotFound();
+                    return BadRequest(new { message = "Username or password is incorrect" });
+                }
+
+                //return CreatedAtAction("GetStaff", new { id = staff.Id }, staff);
+                return staff;
+            }
+            catch (Exception)
+            {
+
+                return BadRequest(new { message = "Server error" });
+            }
+        }
+
+        public static byte[] SHA1HashValue(string s)
+        {
+            System.Text.Encoding.RegisterProvider(System.Text.CodePagesEncodingProvider.Instance);
+
+
+            byte[] bytes = Encoding1252.GetBytes(s);
+
+            var sha1 = SHA512.Create();
+            byte[] hashBytes = sha1.ComputeHash(bytes);
+
+            return hashBytes;
         }
     }
 }
