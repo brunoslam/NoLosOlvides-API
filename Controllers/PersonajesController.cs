@@ -83,8 +83,14 @@ namespace NoLosOlvidesApi.Controllers
         // To protect from overposting attacks, enable the specific properties you want to bind to, for
         // more details, see https://go.microsoft.com/fwlink/?linkid=2123754.
         [HttpPost]
-        public async Task<ActionResult<Personaje>> PostPersonaje(Personaje personaje)
+        public async Task<ActionResult<Personaje>> PostPersonaje([FromBody]Personaje personaje)
         {
+            bool flagResultado = _context.Personaje.Where(p => p.Nombre.Contains(personaje.Nombre) || p.Apellido.Contains(personaje.Apellido)).Count() > 0 ? true : false;
+
+            if (flagResultado)
+                return BadRequest(new { message = "Ya existen registros con esa información" });
+
+
             _context.Personaje.Add(personaje);
             await _context.SaveChangesAsync();
 
