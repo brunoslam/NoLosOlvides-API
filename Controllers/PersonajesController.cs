@@ -117,5 +117,13 @@ namespace NoLosOlvidesApi.Controllers
         {
             return _context.Personaje.Any(e => e.IdPersonaje == id);
         }
+
+        // GET: api/Personajes/
+        [HttpGet("top")]
+        public async Task<ActionResult<IEnumerable<Personaje>>> GetTopPersonajes()
+        {
+            return await _context.Personaje.Take(10).ToListAsync();
+        }
+
     }
 }

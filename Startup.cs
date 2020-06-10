@@ -41,16 +41,9 @@ namespace NoLosOlvidesApi
                                   });
             });
             services.AddControllers();
-            if (IsDebug)
-            {
-                services.AddDbContext<NoLosOlvidesApiContext>(options =>
+
+            services.AddDbContext<NoLosOlvidesApiContext>(options =>
                 options.UseSqlServer(Configuration.GetConnectionString("NoLosOlvidesApiContext")));
-            }
-            else
-            {
-                services.AddDbContext<NoLosOlvidesApiContext>(options =>
-                    options.UseSqlServer(Configuration.GetConnectionString("NoLosOlvidesApiContextProd")));
-            }
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

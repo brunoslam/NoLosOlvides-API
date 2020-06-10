@@ -23,5 +23,7 @@ namespace NoLosOlvidesApi.Data
         public DbSet<NoLosOlvidesApi.Model.Personaje> Personaje { get; set; }
 
         public DbSet<NoLosOlvidesApi.Model.Evidencia> Evidencia { get; set; }
+
+        public DbSet<NoLosOlvidesApi.Model.CategoriaEvidencia> CategoriaEvidencia { get; set; }
     }
 }
