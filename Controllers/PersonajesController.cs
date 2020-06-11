@@ -125,5 +125,24 @@ namespace NoLosOlvidesApi.Controllers
             return await _context.Personaje.Take(10).ToListAsync();
         }
 
+        // Post: api/Personajes/
+        [HttpPost("BuscarPorNombre")]
+        public async Task<ActionResult<IEnumerable<Personaje>>> CheckPersonajePorNombre([FromBody]Personaje personaje)
+        {
+            IEnumerable<Personaje> resultados = await GetPersonajePorNombre(personaje);
+
+            if (resultados.Count() > 0)
+                return BadRequest(new { message = "Ya existen registros con esa información" });
+
+            return Ok(resultados);
+
+        }
+
+        public async Task<IEnumerable<Personaje>> GetPersonajePorNombre(Personaje personaje)
+        {
+            IEnumerable<Personaje> resultados = await _context.Personaje.Where(p => p.Nombre.Contains(personaje.Nombre) && p.Apellido.Contains(personaje.Apellido)).ToListAsync();
+            return resultados;
+        }
+
     }
 }
