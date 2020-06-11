@@ -85,16 +85,37 @@ namespace NoLosOlvidesApi.Controllers
         [HttpPost]
         public async Task<ActionResult<Personaje>> PostPersonaje([FromBody]Personaje personaje)
         {
-            bool flagResultado = _context.Personaje.Where(p => p.Nombre.Contains(personaje.Nombre) || p.Apellido.Contains(personaje.Apellido)).Count() > 0 ? true : false;
+            using (var dbContextTransaction = _context.Database.BeginTransaction())
+            {
+                bool flagResultado = (await GetPersonajePorNombre(personaje)).Count() > 0;
 
-            if (flagResultado)
-                return BadRequest(new { message = "Ya existen registros con esa información" });
+                if (flagResultado)
+                    return BadRequest(new { message = "Ya existen registros con esa información" });
 
 
-            _context.Personaje.Add(personaje);
-            await _context.SaveChangesAsync();
+                _context.Personaje.Add(personaje);
 
+
+
+                await _context.SaveChangesAsync();
+                try
+                {
+                    foreach (Evidencia evidencia in personaje.ArrEvidencias)
+                    {
+                        evidencia.IdPersonaje = personaje.IdPersonaje;
+                        _context.Evidencia.Add(evidencia);
+                    }
+                    await _context.SaveChangesAsync();
+                }
+                catch (Exception)
+                {
+                    dbContextTransaction.Rollback();
+                }
+                dbContextTransaction.Commit();
+
+            }
             return CreatedAtAction("GetPersonaje", new { id = personaje.IdPersonaje }, personaje);
+
         }
 
         // DELETE: api/Personajes/5

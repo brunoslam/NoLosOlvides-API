@@ -15,5 +15,6 @@ namespace NoLosOlvidesApi.Model
         public DateTime Fecha { get; set; }
         public string Url { get; set; }
         public int IdPersonaje { get; set; }
+        public int IdCategoriaEvidencia { get; set; }
     }
 }

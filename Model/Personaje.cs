@@ -21,5 +21,8 @@ namespace NoLosOlvidesApi.Model
         public string Nacionalidad { get; set; }
         public string ImagenUrl { get; set; }
         public int IdEstadoAprobacion { get; set; }
+        [NotMapped]
+        public Evidencia[] ArrEvidencias { get; set; }
+
     }
 }
