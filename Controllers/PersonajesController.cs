@@ -23,7 +23,19 @@ namespace NoLosOlvidesApi.Controllers
 
         // GET: api/Personajes
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<Personaje>>> GetPersonaje()
+        public async Task<ActionResult<IEnumerable<Personaje>>> GetPersonajesAprobados()
+        {
+            return await _context.Personaje.Where(p => p.IdEstadoAprobacion == 2).ToListAsync();
+        }
+        // GET: api/Personajes
+        [HttpGet("pendientes")]
+        public async Task<ActionResult<IEnumerable<Personaje>>> GetPersonajesPendientes()
+        {
+            return await _context.Personaje.Where(p => p.IdEstadoAprobacion == 1).ToListAsync();
+        }
+        // GET: api/Personajes
+        [HttpGet("aprobados")]
+        public async Task<ActionResult<IEnumerable<Personaje>>> GetPersonajes()
         {
             return await _context.Personaje.ToListAsync();
         }
@@ -35,14 +47,39 @@ namespace NoLosOlvidesApi.Controllers
             //var personaje = _context.Personaje.Where(p => p.IdPersonaje == id).Include(p => p.IdCargo.se).FirstOrDefault();
             //var personaje = await _context.Personaje.FindAsync(id);
             var personaje = _context.Personaje.Where(p => p.IdPersonaje == id).FirstOrDefault();
-            var CargoController = new CargosController(_context);
-            var asd = _context.Cargo.Find(personaje.IdCargo);
-            personaje.Cargo = asd;
+            //var CargoController = new CargosController(_context);
+            //Cargo cargo = _context.Cargo.Find(personaje.IdCargo);
+            //personaje.Cargo = cargo;
+
 
             if (personaje == null)
             {
                 return NotFound();
             }
+
+            List<Relacion_Personaje_Cargo> relacion_Personaje_Cargos = await _context.Relacion_Personaje_Cargo.Where(r => r.IdPersonaje == personaje.IdPersonaje).ToListAsync();
+            personaje.ArrRelacionCargo = relacion_Personaje_Cargos;
+            List<Relacion_Personaje_Categoria> relacion_Personaje_Categorias = await _context.Relacion_Personaje_Categoria.Where(r => r.IdPersonaje == personaje.IdPersonaje).ToListAsync();
+            personaje.ArrRelacionCategoria = relacion_Personaje_Categorias;
+            List<Relacion_Personaje_Categoria> relacion_Personaje_Evidencias = await _context.Relacion_Personaje_Categoria.Where(r => r.IdPersonaje == personaje.IdPersonaje).ToListAsync();
+            personaje.ArrRelacionCategoria = relacion_Personaje_Categorias;
+
+            //Comentar si es necesario
+            personaje.ArrCargo = new List<Cargo>();
+            foreach (Relacion_Personaje_Cargo relacion_cargo in relacion_Personaje_Cargos)
+            {
+                var xasd = _context.Cargo.Where(c => c.IdCargo == relacion_cargo.IdCargo).FirstOrDefault();
+                personaje.ArrCargo.Add(_context.Cargo.Where(c => c.IdCargo == relacion_cargo.IdCargo).FirstOrDefault());
+
+            }
+            personaje.ArrCategoria = new List<Categoria>();
+            foreach (Relacion_Personaje_Categoria relacion_categoria in relacion_Personaje_Categorias)
+            {
+                personaje.ArrCategoria.Add(_context.Categoria.Where(c => c.IdCategoria == relacion_categoria.IdCategoria).FirstOrDefault());
+            }
+            //
+            personaje.ArrEvidencias = await _context.Evidencia.Where(e => e.IdPersonaje == personaje.IdPersonaje).ToListAsync();
+
 
             return personaje;
         }

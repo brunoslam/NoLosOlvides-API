@@ -23,11 +23,17 @@ namespace NoLosOlvidesApi.Model
         public string ImagenUrl { get; set; }
         public int IdEstadoAprobacion { get; set; }
         [NotMapped]
-        public Evidencia[] ArrEvidencias { get; set; }
+        public List<Evidencia> ArrEvidencias { get; set; }
         [NotMapped]
-        public Cargo[] ArrCargo { get; set; }
+        public List<Cargo> ArrCargo { get; set; }
         [NotMapped]
-        public Categoria[] ArrCategoria { get; set; }
+        public List<Categoria> ArrCategoria { get; set; }
+        [NotMapped]
+        public List<Relacion_Personaje_Cargo> ArrRelacionCargo { get; set; }
+        [NotMapped]
+        public List<Relacion_Personaje_Categoria> ArrRelacionCategoria { get; set; }
+
+
 
     }
 }
