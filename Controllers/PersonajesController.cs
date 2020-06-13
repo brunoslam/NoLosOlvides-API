@@ -87,7 +87,7 @@ namespace NoLosOlvidesApi.Controllers
         // PUT: api/Personajes/5
         // To protect from overposting attacks, enable the specific properties you want to bind to, for
         // more details, see https://go.microsoft.com/fwlink/?linkid=2123754.
-        [HttpPut("{id}")]
+        //[HttpPut("{id}")]
         public async Task<IActionResult> PutPersonaje(int id, Personaje personaje)
         {
             if (id != personaje.IdPersonaje)
@@ -225,5 +225,36 @@ namespace NoLosOlvidesApi.Controllers
             return resultados;
         }
 
+        // PUT: api/Personajes/5
+        // To protect from overposting attacks, enable the specific properties you want to bind to, for
+        // more details, see https://go.microsoft.com/fwlink/?linkid=2123754.
+        [HttpPut("{id}")]
+        public async Task<IActionResult> PutPersonajeAprobacion(int id, Personaje personaje)
+        {
+            if (id != personaje.IdPersonaje)
+            {
+                return BadRequest();
+            }
+
+            _context.Entry(personaje).State = EntityState.Modified;
+
+            try
+            {
+                await _context.SaveChangesAsync();
+            }
+            catch (DbUpdateConcurrencyException)
+            {
+                if (!PersonajeExists(id))
+                {
+                    return NotFound();
+                }
+                else
+                {
+                    throw;
+                }
+            }
+
+            return Ok();
+        }
     }
 }

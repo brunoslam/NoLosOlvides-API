@@ -37,7 +37,7 @@ namespace NoLosOlvidesApi
                                       //    <add name="Access-Control-Allow-Headers" value="Origin, X-Requested-With, Content-Type, Accept" />
                                       builder.AllowAnyOrigin();
                                       builder.AllowAnyHeader();
-
+                                      builder.AllowAnyMethod();
                                   });
             });
             services.AddControllers();
