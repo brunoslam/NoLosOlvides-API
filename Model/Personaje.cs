@@ -13,6 +13,7 @@ namespace NoLosOlvidesApi.Model
         public int IdPersonaje { get; set; }
         public string Nombre { get; set; }
         public string Apellido { get; set; }
+        [NotMapped]
         public int IdCargo { get; set; }
         [NotMapped]
         public Cargo Cargo { get; set; }
@@ -23,6 +24,10 @@ namespace NoLosOlvidesApi.Model
         public int IdEstadoAprobacion { get; set; }
         [NotMapped]
         public Evidencia[] ArrEvidencias { get; set; }
+        [NotMapped]
+        public Cargo[] ArrCargo { get; set; }
+        [NotMapped]
+        public Categoria[] ArrCategoria { get; set; }
 
     }
 }

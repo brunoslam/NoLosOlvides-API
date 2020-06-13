@@ -92,27 +92,50 @@ namespace NoLosOlvidesApi.Controllers
                 if (flagResultado)
                     return BadRequest(new { message = "Ya existen registros con esa información" });
 
-
-                _context.Personaje.Add(personaje);
-
-
-
-                await _context.SaveChangesAsync();
                 try
                 {
+                    //Insertar personaje
+                    _context.Personaje.Add(personaje);
+                    await _context.SaveChangesAsync();
+                    //insertar evidencia
                     foreach (Evidencia evidencia in personaje.ArrEvidencias)
                     {
                         evidencia.IdPersonaje = personaje.IdPersonaje;
                         _context.Evidencia.Add(evidencia);
                     }
                     await _context.SaveChangesAsync();
+
+                    //insertar Relacion_Personaje_Cargo
+                    foreach (Cargo cargo in personaje.ArrCargo)
+                    {
+                        Relacion_Personaje_Cargo relacion_Personaje_Cargo = new Relacion_Personaje_Cargo
+                        {
+                            IdCargo = cargo.IdCargo,
+                            IdPersonaje = personaje.IdPersonaje
+                        };
+                        _context.Relacion_Personaje_Cargo.Add(relacion_Personaje_Cargo);
+                    }
+                    await _context.SaveChangesAsync();
+
+                    //insertar Relacion_Personaje_Categoria
+                    foreach (Categoria categoria in personaje.ArrCategoria)
+                    {
+                        Relacion_Personaje_Categoria relacion_Personaje_Categoria = new Relacion_Personaje_Categoria
+                        {
+                            IdCategoria = categoria.IdCategoria,
+                            IdPersonaje = personaje.IdPersonaje
+                        };
+                        _context.Relacion_Personaje_Categoria.Add(relacion_Personaje_Categoria);
+                    }
+                    await _context.SaveChangesAsync();
+
                 }
                 catch (Exception)
                 {
                     dbContextTransaction.Rollback();
+                    return BadRequest(new { message = "Error al insertar" });
                 }
                 dbContextTransaction.Commit();
-
             }
             return CreatedAtAction("GetPersonaje", new { id = personaje.IdPersonaje }, personaje);
 
