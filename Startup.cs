@@ -35,9 +35,10 @@ namespace NoLosOlvidesApi
                                   {
                                       //builder.WithOrigins("*");
                                       //    <add name="Access-Control-Allow-Headers" value="Origin, X-Requested-With, Content-Type, Accept" />
-                                      builder.AllowAnyOrigin();
-                                      builder.AllowAnyHeader();
-                                      builder.AllowAnyMethod();
+                                      builder
+                                      .AllowAnyOrigin()
+                                      .AllowAnyHeader()
+                                      .AllowAnyMethod();
                                   });
             });
             services.AddControllers();
@@ -53,12 +54,11 @@ namespace NoLosOlvidesApi
             {
                 app.UseDeveloperExceptionPage();
             }
+            app.UseCors(MyAllowSpecificOrigins);
 
             app.UseHttpsRedirection();
 
             app.UseRouting();
-
-            app.UseCors(MyAllowSpecificOrigins);
 
             app.UseAuthorization();
 

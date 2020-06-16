@@ -80,10 +80,21 @@ namespace NoLosOlvidesApi.Controllers
         [HttpPost]
         public async Task<ActionResult<Cargo>> PostCargo(Cargo cargo)
         {
-            _context.Cargo.Add(cargo);
-            await _context.SaveChangesAsync();
+            try
+            {
+                if (_context.Cargo.Where(c => c.Titulo == cargo.Titulo).Count() > 0)
+                {
+                    return BadRequest(new { message = "Ya existen registros con esa información" });
+                }
+                _context.Cargo.Add(cargo);
+                await _context.SaveChangesAsync();
 
-            return CreatedAtAction("GetCargo", new { id = cargo.IdCargo }, cargo);
+                return CreatedAtAction("GetCargo", new { id = cargo.IdCargo }, cargo);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(new { message = ex.Message });
+            }
         }
 
         // DELETE: api/Cargos/5
