@@ -29,5 +29,7 @@ namespace NoLosOlvidesApi.Data
         public DbSet<NoLosOlvidesApi.Model.Relacion_Personaje_Cargo> Relacion_Personaje_Cargo { get; set; }
 
         public DbSet<NoLosOlvidesApi.Model.Relacion_Personaje_Categoria> Relacion_Personaje_Categoria { get; set; }
+
+        public DbSet<NoLosOlvidesApi.Model.Sugerencia> Sugerencia { get; set; }
     }
 }
